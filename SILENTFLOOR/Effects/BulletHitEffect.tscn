@@ -1,0 +1,67 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Effects/circle32.png" type="Texture" id=1]
+
+[sub_resource type="SpatialMaterial" id=3]
+flags_transparent = true
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+params_billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+albedo_texture = ExtResource( 1 )
+
+[sub_resource type="Gradient" id=8]
+offsets = PoolRealArray( 0, 0.00621118, 0.0124224, 0.180124, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.304348, 0.304348, 0.304348, 1, 1, 1, 1, 1, 0.958496, 0.924635, 0.250856, 1, 0.880371, 0.298184, 0.209776, 1 )
+
+[sub_resource type="GradientTexture" id=9]
+gradient = SubResource( 8 )
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.978261, 0.00227273 ), -6.69091, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+initial_velocity = 5.0
+scale = 0.01
+scale_random = 0.05
+scale_curve = SubResource( 5 )
+color = Color( 0.278431, 0.270588, 0.270588, 1 )
+color_ramp = SubResource( 9 )
+
+[sub_resource type="QuadMesh" id=7]
+
+[sub_resource type="QuadMesh" id=1]
+
+[sub_resource type="SpatialMaterial" id=2]
+flags_transparent = true
+albedo_color = Color( 0.0705882, 0.0431373, 0.0431373, 1 )
+albedo_texture = ExtResource( 1 )
+
+[node name="BulletHitEffect" type="Spatial"]
+
+[node name="Particles" type="Particles" parent="."]
+transform = Transform( 0.000220088, -1, -0.000162964, 1, 0.000220075, 5.44957e-05, -5.44409e-05, -0.000162982, 1, 0, 0, 0 )
+material_override = SubResource( 3 )
+emitting = false
+one_shot = true
+explosiveness = 0.95
+local_coords = false
+process_material = SubResource( 6 )
+draw_pass_1 = SubResource( 7 )
+
+[node name="BulletDecal" type="MeshInstance" parent="."]
+transform = Transform( 0.147244, 0, 0, 0, -6.43625e-09, 0.147244, 0, -0.147244, -6.43625e-09, 0, 0.005, 0 )
+mesh = SubResource( 1 )
+material/0 = SubResource( 2 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.001
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="Particles" method="set_emitting" binds= [ true ]]
